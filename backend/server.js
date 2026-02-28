@@ -25,9 +25,14 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'APCAS Clinic API is running' });
 });
 
-// Initialize database on startup
-initDb();
-
-app.listen(PORT, () => {
-  console.log(`APCAS Clinic API running at http://localhost:${PORT}`);
+// Initialize database then start server
+const start = async () => {
+  await initDb();
+  app.listen(PORT, () => {
+    console.log(`APCAS Clinic API running at http://localhost:${PORT}`);
+  });
+};
+start().catch((err) => {
+  console.error('Failed to start:', err);
+  process.exit(1);
 });

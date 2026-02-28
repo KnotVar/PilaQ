@@ -13,7 +13,7 @@ A digital clinic management system for the APCAS school clinic — student healt
 
 - **Frontend:** React 18, Vite, React Router
 - **Backend:** Node.js, Express
-- **Database:** SQLite (via better-sqlite3)
+- **Database:** SQLite locally (better-sqlite3); PostgreSQL on Render for production (data persists)
 
 ## Setup
 
@@ -51,6 +51,19 @@ Default nurse account:
 - **Password:** `clinic123`
 
 Change these in production.
+
+## Deploying to Render (so data persists)
+
+On Render, the filesystem is ephemeral, so SQLite data is lost on restart. Use PostgreSQL:
+
+1. In the [Render Dashboard](https://dashboard.render.com), click **New → PostgreSQL**.
+2. Create a **Free** database (same region as your web service).
+3. After it’s created, open the database → **Connect** → copy the **Internal Database URL**.
+4. Open your **Web Service** (the backend) → **Environment**.
+5. Add:
+   - **Key:** `DATABASE_URL`
+   - **Value:** paste the Internal Database URL.
+6. Save. Render will redeploy; the backend will use PostgreSQL and data will persist across restarts.
 
 ## Project Structure
 

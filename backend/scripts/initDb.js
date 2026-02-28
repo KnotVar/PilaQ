@@ -1,5 +1,5 @@
 import { initDb } from '../db/schema.js';
 
 console.log('Initializing database...');
-initDb();
+await initDb();
 console.log('Database initialized successfully.');
