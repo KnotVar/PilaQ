@@ -12,7 +12,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:5173' }));
+// Allow your Z.com frontend; set FRONTEND_URL on Render to your exact site URL (e.g. https://yoursite.z.com)
+const corsOrigin = process.env.FRONTEND_URL || true;
+app.use(cors({ origin: corsOrigin, credentials: true }));
 app.use(express.json());
 
 // API routes

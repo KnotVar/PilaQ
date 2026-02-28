@@ -12,14 +12,19 @@ export function useApi() {
 
   const request = useCallback(async (path, options = {}) => {
     const token = getToken()
-    const res = await fetch(`${API_BASE}${path}`, {
-      ...options,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
-      },
-    })
+    let res
+    try {
+      res = await fetch(`${API_BASE}${path}`, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token && { Authorization: `Bearer ${token}` }),
+          ...options.headers,
+        },
+      })
+    } catch (err) {
+      throw new Error('Cannot reach server. Check your connection or try again in a moment.')
+    }
     if (!res.ok) {
       const err = await res.json().catch(() => ({}))
       throw new Error(err.error || res.statusText)
