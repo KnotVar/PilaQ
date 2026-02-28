@@ -6,15 +6,42 @@ export default function Dashboard() {
   const { request } = useApi()
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
-  useEffect(() => {
+  const loadStats = () => {
+    setError(null)
+    setLoading(true)
     request('/dashboard/stats')
       .then(setStats)
-      .catch(console.error)
+      .catch((err) => setError(err.message || 'Failed to load dashboard'))
       .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    loadStats()
   }, [])
 
-  if (loading) return <div>Loading dashboard...</div>
+  if (loading && !stats) return <div>Loading dashboard...</div>
+  if (error && !stats) {
+    return (
+      <div>
+        <h1 style={{ margin: '0 0 1rem 0', fontSize: '1.5rem' }}>Dashboard</h1>
+        <p style={{ color: 'var(--danger)', marginBottom: '1rem' }}>{error}</p>
+        <button
+          onClick={loadStats}
+          style={{
+            padding: '0.5rem 1rem',
+            background: 'var(--primary)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+          }}
+        >
+          Try again
+        </button>
+      </div>
+    )
+  }
   if (!stats) return <div>Failed to load dashboard</div>
 
   return (

@@ -24,7 +24,7 @@ router.get('/stats', async (req, res) => {
 
   const topComplaints = await db.getRows(
     process.env.DATABASE_URL
-      ? `SELECT chief_complaint, COUNT(*) as count FROM consultations
+      ? `SELECT LOWER(TRIM(chief_complaint)) AS chief_complaint, COUNT(*) as count FROM consultations
          WHERE visit_date >= CURRENT_DATE - INTERVAL '30 days'
          GROUP BY LOWER(TRIM(chief_complaint)) ORDER BY count DESC LIMIT 10`
       : `SELECT chief_complaint, COUNT(*) as count FROM consultations
